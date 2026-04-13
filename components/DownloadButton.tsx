@@ -19,14 +19,28 @@ export default function DownloadButton({ previewRef, filename }: DownloadButtonP
     try {
       const html2pdf = (await import("html2pdf.js")).default;
 
+      const clone = element.cloneNode(true) as HTMLElement;
+      clone.style.borderRadius = "0";
+      clone.style.border = "none";
+      clone.style.boxShadow = "none";
+      clone.style.minHeight = "auto";
+
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "absolute";
+      wrapper.style.left = "-9999px";
+      wrapper.style.top = "0";
+      wrapper.appendChild(clone);
+      document.body.appendChild(wrapper);
+
       const opt = {
-        margin: [0.4, 0.4, 0.4, 0.4] as [number, number, number, number],
+        margin: [0.3, 0.35, 0.3, 0.35] as [number, number, number, number],
         filename: filename || "Invoice.pdf",
         image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: {
           scale: 2,
           useCORS: true,
           letterRendering: true,
+          backgroundColor: "#ffffff",
         },
         jsPDF: {
           unit: "in",
@@ -35,7 +49,9 @@ export default function DownloadButton({ previewRef, filename }: DownloadButtonP
         },
       };
 
-      await html2pdf().set(opt).from(element).save();
+      await html2pdf().set(opt).from(clone).save();
+
+      document.body.removeChild(wrapper);
     } catch (err) {
       console.error("PDF generation failed:", err);
     } finally {

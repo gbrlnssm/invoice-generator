@@ -1,7 +1,7 @@
 "use client";
 
 import { InvoiceData } from "@/lib/types";
-import { PAYMENT_TERMS_OPTIONS } from "@/lib/defaults";
+import { PAYMENT_TERMS_OPTIONS, formatDate } from "@/lib/defaults";
 import LineItems from "./LineItems";
 
 interface InvoiceFormProps {
@@ -53,6 +53,35 @@ function Field({
   );
 }
 
+function DateField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div>
+      <label className="block text-[11px] font-semibold uppercase tracking-wider text-[rgb(134,134,138)] mb-1.5">
+        {label}
+      </label>
+      <input
+        type="date"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full border border-gray-200 rounded-md px-3 py-2 text-[15px] text-[rgb(29,29,31)] bg-white focus:outline-none focus:border-gray-400 transition-colors cursor-pointer"
+      />
+      {value && (
+        <p className="mt-1 text-[13px] text-[rgb(134,134,138)]">
+          {formatDate(value)}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function InvoiceForm({ data, onChange }: InvoiceFormProps) {
   const update = <K extends keyof InvoiceData>(key: K, value: InvoiceData[K]) => {
     onChange({ ...data, [key]: value });
@@ -71,6 +100,7 @@ export default function InvoiceForm({ data, onChange }: InvoiceFormProps) {
           <Field label="Company" value={data.fromCompany} onChange={(v) => update("fromCompany", v)} placeholder="Your Company LLC" />
           <Field label="Address" value={data.fromAddress} onChange={(v) => update("fromAddress", v)} placeholder={"123 Main St\nNew York, NY 10001"} multiline />
           <Field label="Email" value={data.fromEmail} onChange={(v) => update("fromEmail", v)} placeholder="you@company.com" type="email" />
+          <Field label="Phone" value={data.fromPhone} onChange={(v) => update("fromPhone", v)} placeholder="(555) 123-4567" type="tel" />
         </div>
 
         {/* BILL TO */}
@@ -82,6 +112,7 @@ export default function InvoiceForm({ data, onChange }: InvoiceFormProps) {
           <Field label="Company" value={data.toCompany} onChange={(v) => update("toCompany", v)} placeholder="Acme Corp" />
           <Field label="Address" value={data.toAddress} onChange={(v) => update("toAddress", v)} placeholder={"456 Market St\nSan Francisco, CA 94105"} multiline />
           <Field label="Email" value={data.toEmail} onChange={(v) => update("toEmail", v)} placeholder="client@acme.com" type="email" />
+          <Field label="Phone" value={data.toPhone} onChange={(v) => update("toPhone", v)} placeholder="(555) 987-6543" type="tel" />
         </div>
       </div>
 
@@ -93,10 +124,10 @@ export default function InvoiceForm({ data, onChange }: InvoiceFormProps) {
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Invoice #" value={data.invoiceNumber} onChange={(v) => update("invoiceNumber", v)} placeholder="INV-001" />
-            <Field label="Issue Date" value={data.issueDate} onChange={(v) => update("issueDate", v)} type="date" />
+            <DateField label="Issue Date" value={data.issueDate} onChange={(v) => update("issueDate", v)} />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Due Date" value={data.dueDate} onChange={(v) => update("dueDate", v)} type="date" />
+            <DateField label="Due Date" value={data.dueDate} onChange={(v) => update("dueDate", v)} />
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-[rgb(134,134,138)] mb-1.5">
                 Payment Terms

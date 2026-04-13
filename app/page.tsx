@@ -20,7 +20,7 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <h1 className="text-[20px] font-bold text-[rgb(29,29,31)]">
+          <h1 className="text-[20px] font-bold text-[rgb(29,29,31)] tracking-tight">
             Invoice Generator
           </h1>
         </div>
@@ -28,7 +28,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
           {/* LEFT: Form */}
           <div className="w-full lg:w-1/2 lg:max-w-xl">
             <InvoiceForm data={data} onChange={setData} />
@@ -36,7 +36,9 @@ export default function Home() {
 
           {/* RIGHT: Preview + Download */}
           <div className="w-full lg:w-1/2 lg:sticky lg:top-8 lg:self-start">
-            <InvoicePreview ref={previewRef} data={data} />
+            <div className="rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <InvoicePreview ref={previewRef} data={data} />
+            </div>
             <div className="mt-6 flex justify-center">
               <DownloadButton previewRef={previewRef} filename={pdfFilename} />
             </div>

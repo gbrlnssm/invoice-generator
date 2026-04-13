@@ -1,6 +1,7 @@
 export interface LineItem {
   id: string;
   description: string;
+  details: string;
   quantity: number;
   rate: number;
 }
@@ -11,12 +12,14 @@ export interface InvoiceData {
   fromCompany: string;
   fromAddress: string;
   fromEmail: string;
+  fromPhone: string;
 
   // BILL TO
   toName: string;
   toCompany: string;
   toAddress: string;
   toEmail: string;
+  toPhone: string;
 
   // INVOICE DETAILS
   invoiceNumber: string;

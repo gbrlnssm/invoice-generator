@@ -18,15 +18,17 @@ function todayString(): string {
 
 export function createDefaultInvoice(): InvoiceData {
   return {
-    fromName: "",
-    fromCompany: "",
-    fromAddress: "",
-    fromEmail: "",
+    fromName: "Nataly Schloser",
+    fromCompany: "Design Gurú LLC, EIN 84-2529742",
+    fromAddress: "1135 103rd St, Bay Harbor Islands, FL 33154",
+    fromEmail: "natalyschloser@gmail.com",
+    fromPhone: "(305) 202-2892",
 
     toName: "",
     toCompany: "",
     toAddress: "",
     toEmail: "",
+    toPhone: "",
 
     invoiceNumber: "",
     issueDate: todayString(),
@@ -35,7 +37,7 @@ export function createDefaultInvoice(): InvoiceData {
 
     projectName: "",
 
-    lineItems: [{ id: crypto.randomUUID(), description: "", quantity: 1, rate: 0 }],
+    lineItems: [{ id: crypto.randomUUID(), description: "", details: "", quantity: 1, rate: 0 }],
 
     taxEnabled: false,
     taxRate: 0,
@@ -43,7 +45,7 @@ export function createDefaultInvoice(): InvoiceData {
     discountType: "percentage",
     discountValue: 0,
 
-    notes: "",
+    notes: "Payment via Zelle: natalyschloser@gmail.com",
   };
 }
 

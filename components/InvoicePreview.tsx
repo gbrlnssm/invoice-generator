@@ -13,7 +13,16 @@ interface InvoicePreviewProps {
   data: InvoiceData;
 }
 
-const Separator = () => <div className="border-t border-gray-200 my-6" />;
+const Separator = () => (
+  <div
+    className="my-7"
+    style={{ height: "1px", background: "#e5e5e5" }}
+  />
+);
+
+const LightSeparator = () => (
+  <div style={{ height: "1px", background: "#f0f0f0" }} />
+);
 
 const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
   ({ data }, ref) => {
@@ -30,30 +39,51 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           : data.discountValue
         : 0;
 
-    const hasFrom = data.fromName || data.fromCompany || data.fromAddress || data.fromEmail;
-    const hasTo = data.toName || data.toCompany || data.toAddress || data.toEmail;
-    const hasDateInfo = data.issueDate || data.dueDate || (data.paymentTerms && data.paymentTerms !== "None");
+    const hasFrom =
+      data.fromName || data.fromCompany || data.fromAddress || data.fromEmail || data.fromPhone;
+    const hasTo =
+      data.toName || data.toCompany || data.toAddress || data.toEmail || data.toPhone;
+    const hasDateInfo =
+      data.issueDate || data.dueDate || (data.paymentTerms && data.paymentTerms !== "None");
 
     return (
       <div
         ref={ref}
-        className="bg-white rounded-xl border border-gray-200 shadow-sm p-8 sm:p-10 max-w-[700px] w-full"
-        style={{ fontFamily: "-apple-system, system-ui, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif" }}
+        className="bg-white w-full invoice-preview"
+        style={{
+          fontFamily:
+            "-apple-system, system-ui, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif",
+          maxWidth: "700px",
+          minHeight: "906px",
+          padding: "48px 44px",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         {/* Header: Invoice title + dates */}
         <div className="flex justify-between items-start">
-          <h1
-            className="font-bold text-[rgb(29,29,31)]"
-            style={{ fontSize: "24px", lineHeight: "32px" }}
-          >
-            Invoice
-          </h1>
+          <div>
+            <h1
+              className="font-bold text-[rgb(29,29,31)]"
+              style={{ fontSize: "26px", lineHeight: "34px", letterSpacing: "-0.02em" }}
+            >
+              Invoice
+            </h1>
+            {data.invoiceNumber && (
+              <p
+                className="text-[rgb(134,134,138)]"
+                style={{ fontSize: "13px", lineHeight: "18px" }}
+              >
+                {data.invoiceNumber}
+              </p>
+            )}
+          </div>
           {hasDateInfo && (
             <div className="text-right space-y-0.5">
               {data.issueDate && (
                 <p
                   className="text-[rgb(134,134,138)]"
-                  style={{ fontSize: "13px", lineHeight: "17px" }}
+                  style={{ fontSize: "13px", lineHeight: "18px" }}
                 >
                   Issued {formatDate(data.issueDate)}
                 </p>
@@ -61,7 +91,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               {data.dueDate && (
                 <p
                   className="text-[rgb(134,134,138)]"
-                  style={{ fontSize: "13px", lineHeight: "17px" }}
+                  style={{ fontSize: "13px", lineHeight: "18px" }}
                 >
                   Due {formatDate(data.dueDate)}
                 </p>
@@ -69,7 +99,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               {data.paymentTerms && data.paymentTerms !== "None" && (
                 <p
                   className="text-[rgb(134,134,138)]"
-                  style={{ fontSize: "13px", lineHeight: "17px" }}
+                  style={{ fontSize: "13px", lineHeight: "18px" }}
                 >
                   {data.paymentTerms}
                 </p>
@@ -78,11 +108,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           )}
         </div>
 
-        {/* FROM (no section header, just the data) */}
+        {/* FROM (no section header) */}
         {hasFrom && (
-          <div className="mt-4" style={{ fontSize: "15px", lineHeight: "21px" }}>
+          <div className="mt-5" style={{ fontSize: "14px", lineHeight: "20px" }}>
             {data.fromName && (
-              <p className="font-bold text-[rgb(29,29,31)]">{data.fromName}</p>
+              <p className="font-bold text-[rgb(29,29,31)]" style={{ fontSize: "15px", lineHeight: "21px" }}>
+                {data.fromName}
+              </p>
             )}
             {data.fromCompany && (
               <p className="text-[rgb(134,134,138)]">{data.fromCompany}</p>
@@ -97,6 +129,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             {data.fromEmail && (
               <p className="text-[rgb(134,134,138)]">{data.fromEmail}</p>
             )}
+            {data.fromPhone && (
+              <p className="text-[rgb(134,134,138)]">{data.fromPhone}</p>
+            )}
           </div>
         )}
 
@@ -105,14 +140,16 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           <>
             <Separator />
             <p
-              className="font-semibold uppercase tracking-wider text-[rgb(134,134,138)] mb-2"
-              style={{ fontSize: "11px", lineHeight: "17px", letterSpacing: "0.05em" }}
+              className="font-semibold uppercase text-[rgb(134,134,138)] mb-2"
+              style={{ fontSize: "10px", lineHeight: "14px", letterSpacing: "0.08em" }}
             >
               Bill To
             </p>
-            <div style={{ fontSize: "15px", lineHeight: "21px" }}>
+            <div style={{ fontSize: "14px", lineHeight: "20px" }}>
               {data.toName && (
-                <p className="font-bold text-[rgb(29,29,31)]">{data.toName}</p>
+                <p className="font-bold text-[rgb(29,29,31)]" style={{ fontSize: "15px", lineHeight: "21px" }}>
+                  {data.toName}
+                </p>
               )}
               {data.toCompany && (
                 <p className="text-[rgb(134,134,138)]">{data.toCompany}</p>
@@ -127,6 +164,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               {data.toEmail && (
                 <p className="text-[rgb(134,134,138)]">{data.toEmail}</p>
               )}
+              {data.toPhone && (
+                <p className="text-[rgb(134,134,138)]">{data.toPhone}</p>
+              )}
             </div>
           </>
         )}
@@ -136,8 +176,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           <>
             <Separator />
             <p
-              className="font-semibold uppercase tracking-wider text-[rgb(134,134,138)] mb-2"
-              style={{ fontSize: "11px", lineHeight: "17px", letterSpacing: "0.05em" }}
+              className="font-semibold uppercase text-[rgb(134,134,138)] mb-2"
+              style={{ fontSize: "10px", lineHeight: "14px", letterSpacing: "0.08em" }}
             >
               Project
             </p>
@@ -155,13 +195,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         <div className="flex justify-between mb-3">
           <span
             className="text-[rgb(134,134,138)]"
-            style={{ fontSize: "13px", lineHeight: "17px" }}
+            style={{ fontSize: "12px", lineHeight: "16px" }}
           >
             Description
           </span>
           <span
             className="text-[rgb(134,134,138)]"
-            style={{ fontSize: "13px", lineHeight: "17px" }}
+            style={{ fontSize: "12px", lineHeight: "16px" }}
           >
             Amount
           </span>
@@ -172,27 +212,37 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           const showQty = item.quantity > 1;
           return (
             <div key={item.id}>
-              <div className="border-t border-gray-100" />
+              <LightSeparator />
               <div className="flex justify-between items-start py-3">
                 <div>
                   <p
                     className="font-semibold text-[rgb(29,29,31)]"
-                    style={{ fontSize: "15px", lineHeight: "21px" }}
+                    style={{ fontSize: "14px", lineHeight: "20px" }}
                   >
                     {item.description || "Untitled Item"}
                   </p>
+                  {item.details && (
+                    <div
+                      className="text-[rgb(134,134,138)]"
+                      style={{ fontSize: "12px", lineHeight: "16px" }}
+                    >
+                      {item.details.split("\n").map((line, i) => (
+                        <p key={i}>{line}</p>
+                      ))}
+                    </div>
+                  )}
                   {showQty && (
                     <p
                       className="text-[rgb(134,134,138)]"
-                      style={{ fontSize: "13px", lineHeight: "17px" }}
+                      style={{ fontSize: "12px", lineHeight: "16px" }}
                     >
-                      {item.quantity} x {formatCurrency(item.rate)}
+                      {item.quantity} &times; {formatCurrency(item.rate)}
                     </p>
                   )}
                 </div>
                 <span
                   className="text-[rgb(134,134,138)]"
-                  style={{ fontSize: "15px", lineHeight: "21px" }}
+                  style={{ fontSize: "14px", lineHeight: "20px" }}
                 >
                   {formatCurrency(amount)}
                 </span>
@@ -202,19 +252,21 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         })}
 
         {/* SUBTOTAL / TAX / DISCOUNT / TOTAL */}
-        <div className="border-t border-gray-200 mt-2 pt-4">
+        <div style={{ marginTop: "8px", paddingTop: "16px" }}>
+          <div style={{ height: "1px", background: "#e5e5e5", marginBottom: "16px" }} />
+
           {(data.taxEnabled || data.discountEnabled) && (
             <div className="space-y-1 mb-3">
               <div className="flex justify-between">
                 <span
                   className="text-[rgb(134,134,138)]"
-                  style={{ fontSize: "13px", lineHeight: "17px" }}
+                  style={{ fontSize: "12px", lineHeight: "16px" }}
                 >
                   Subtotal
                 </span>
                 <span
                   className="text-[rgb(134,134,138)]"
-                  style={{ fontSize: "15px", lineHeight: "21px" }}
+                  style={{ fontSize: "14px", lineHeight: "20px" }}
                 >
                   {formatCurrency(subtotal)}
                 </span>
@@ -223,13 +275,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <div className="flex justify-between">
                   <span
                     className="text-[rgb(134,134,138)]"
-                    style={{ fontSize: "13px", lineHeight: "17px" }}
+                    style={{ fontSize: "12px", lineHeight: "16px" }}
                   >
                     Tax ({data.taxRate}%)
                   </span>
                   <span
                     className="text-[rgb(134,134,138)]"
-                    style={{ fontSize: "15px", lineHeight: "21px" }}
+                    style={{ fontSize: "14px", lineHeight: "20px" }}
                   >
                     {formatCurrency(taxAmount)}
                   </span>
@@ -239,7 +291,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <div className="flex justify-between">
                   <span
                     className="text-[rgb(134,134,138)]"
-                    style={{ fontSize: "13px", lineHeight: "17px" }}
+                    style={{ fontSize: "12px", lineHeight: "16px" }}
                   >
                     Discount
                     {data.discountType === "percentage"
@@ -248,13 +300,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   </span>
                   <span
                     className="text-[rgb(134,134,138)]"
-                    style={{ fontSize: "15px", lineHeight: "21px" }}
+                    style={{ fontSize: "14px", lineHeight: "20px" }}
                   >
                     -{formatCurrency(discountAmount)}
                   </span>
                 </div>
               )}
-              <div className="border-t border-gray-100 my-2" />
+              <div style={{ height: "1px", background: "#f0f0f0", margin: "8px 0" }} />
             </div>
           )}
 
@@ -276,23 +328,23 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
         {/* NOTES */}
         {data.notes && (
-          <>
+          <div className="mt-auto pt-8">
             <Separator />
             <p
-              className="font-semibold uppercase tracking-wider text-[rgb(134,134,138)] mb-2"
-              style={{ fontSize: "11px", lineHeight: "17px", letterSpacing: "0.05em" }}
+              className="font-semibold uppercase text-[rgb(134,134,138)] mb-2"
+              style={{ fontSize: "10px", lineHeight: "14px", letterSpacing: "0.08em" }}
             >
               Notes
             </p>
             <div
               className="text-[rgb(134,134,138)]"
-              style={{ fontSize: "13px", lineHeight: "17px" }}
+              style={{ fontSize: "13px", lineHeight: "18px" }}
             >
               {data.notes.split("\n").map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     );
